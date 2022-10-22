@@ -1,9 +1,19 @@
+
+
 const SearchBar = (props) => {
+
   return (
     <div className="SearchBar">
-      <form onSubmit={props.getData}>
-        <input type="text" placeholder="type in a city name"></input>
-        <button onClick={props.getData}>find weather</button>
+      <form>
+        <input
+          required
+          type="text"
+          name="city"
+          value={props.city}
+          placeholder="type in city name"
+          onChange={props.handleChange}
+        ></input>
+        <button onClick={props.handleSubmit}>find weather</button>
       </form>
     </div>
   );

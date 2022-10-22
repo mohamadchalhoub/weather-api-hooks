@@ -1,21 +1,78 @@
-* {
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap");
+
+body {
+  font-family: "raleway";
   margin: 0;
   padding: 0;
+  background-color: rgb(155, 207, 241);
 }
 
-.tempNow {
-  text-align: center;
-  margin-top: 200px;
-}
-
-.tempHour {
-  margin-top: 250px;
+.SearchBar {
   display: flex;
   flex-direction: row;
-  justify-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  background-color: rgb(99, 142, 207);
 }
 
-.hourPrev {
-  width: 100px;
+input {
+  width: 200px;
+  margin: 20px;
+  padding: 10px;
+  word-spacing: 2px;
+  letter-spacing: 1px;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: rgb(99, 142, 207);
 }
+
+input:hover {
+  border-bottom: 1px solid gray;
+}
+
+input[type="text"] {
+  color: white;
+  opacity: 0.9;
+}
+
+::placeholder {
+  color: whitesmoke;
+  opacity: 0.6;
+}
+
+button {
+  padding: 10px;
+  margin: 20px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background-color: rgb(59, 116, 201);
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.WeatherNow {
+  margin-top: 25px;
+  font-weight: bolder;
+  text-align: center;
+  font-size: 15px;
+}
+
+.TemperatureHourlyFlex{
+  margin-top: 50px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:space-around;
+  justify-items: center;
+  text-align: center;
+}
+
+
+
+
