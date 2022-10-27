@@ -73,6 +73,18 @@ button {
   text-align: center;
 }
 
+.clear{
+background-color: rgb(155, 207, 241);
+opacity: ;
+transition: 0.4 ease-out;
+}
+
+.rain{
+background-color: rgb(155, 207, 241);
+opacity: ;
+transition: 0.4 ease-out;
+}
+
 
 
 
