@@ -11,7 +11,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  background-color: black;
+  background-color: rgb(99, 142, 207);
 }
 
 input {
