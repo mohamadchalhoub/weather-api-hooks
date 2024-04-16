@@ -15,6 +15,7 @@ const TemperatureNow = (props) => {
         <b>Humidity: {props.humidity} %</b> <b> Pressure: {props.pressure} </b>
       </h5>
     </div>
+
   );
 };
 

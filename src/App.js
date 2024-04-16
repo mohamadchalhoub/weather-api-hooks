@@ -12,6 +12,8 @@ import Storm from "./weather-icons/weather-icons/storm.svg";
 import Unknown from "./weather-icons/weather-icons/unknown.svg";
 import MostlyCloudy from './weather-icons/weather-icons/mostlycloudy.svg';
 import PartlyCloudy from './weather-icons/weather-icons/partlycloudy.svg';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+
 // import Cloudy from './weather-icons/weather-icons/cloudy';
 
 function App() {
@@ -47,17 +49,48 @@ function App() {
     return { data, isPending, error };
   };
 
-  const chooseIcon = (id) => {
+  /* const chooseIcon = (id) => {
     if (id === 800) return Clear;
     if (id === 801) return PartlyCloudy;
     if (800 < id < 805) return MostlyCloudy;
     if (id === null) return Unknown;
     if (id < 300) return Storm;
     if (300 < id < 499) return Drizzle;
+    if (id === 500) return Rain;
     if (500 < id < 599) return Rain;
     if (600 < id < 699) return Snow;
     if (700 < id < 799) return Fog;
+  }; */
+
+  const chooseIcon = (id) => {
+    switch (id) {
+      case 800:
+        return Clear;
+      case 801:
+        return PartlyCloudy;
+      case 802:
+      case 803:
+      case 804:
+        return MostlyCloudy;
+      case null:
+        return Unknown;
+      case (id < 300):
+        return Storm;
+      case (id >= 300 && id < 499):
+        return Drizzle;
+      case 500:
+        return Rain;
+      case (id >= 500 && id < 599):
+        return Rain;
+      case (id >= 600 && id < 699):
+        return Snow;
+      case (id >= 700 && id < 799):
+        return Fog;
+      default:
+        return Unknown;
+    }
   };
+  
 
   return (
     <div className="clear rain">
@@ -79,8 +112,9 @@ function App() {
             if (id > 0) {
               return (
                 <TemperatureHourly
+                  error={error}
                   temp={item.main.temp}
-                  time={item.dt_txt}
+                  time={formatDistanceToNow(new Date(item.dt_txt), {addSuffix: true})}
                   chooseIcon={chooseIcon(item.weather[0].id)}
                 />
               );

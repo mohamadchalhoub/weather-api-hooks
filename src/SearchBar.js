@@ -6,8 +6,10 @@ const SearchBar = (props) => {
           required
           type="text"
           name="city"
+          autoComplete="on"
+          spellCheck="true"
           value={props.city}
-          placeholder="type in city name"
+          placeholder="Type in city name"
           onChange={props.handleChange}
         ></input>
         <button onClick={props.handleSubmit}>find weather</button>
