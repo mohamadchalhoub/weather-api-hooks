@@ -13,6 +13,7 @@ import Unknown from "./weather-icons/weather-icons/unknown.svg";
 import MostlyCloudy from './weather-icons/weather-icons/mostlycloudy.svg';
 import PartlyCloudy from './weather-icons/weather-icons/partlycloudy.svg';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import format from 'date-fns/format'
 
 // import Cloudy from './weather-icons/weather-icons/cloudy';
 
@@ -99,11 +100,17 @@ function App() {
     // Start loading animation
     setIsLoading(true);
     setShowWeather(false);
+    setError(null);
     
     fetch(url)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Cannot fetch data from that resource");
+          return res.json().then((body) => {
+            const friendly = res.status === 404
+              ? 'City not found. Please check the spelling and try again.'
+              : (body && body.message ? body.message : 'Failed to fetch weather data.');
+            throw new Error(friendly);
+          });
         }
         return res.json();
       })
@@ -123,6 +130,7 @@ function App() {
         setError(error.message);
         setIsLoading(false);
         setShowWeather(false);
+        setData(null);
       });
     return { data, isPending, error };
   };
@@ -183,6 +191,9 @@ function App() {
         handleInputFocus={handleInputFocus}
         handleInputBlur={handleInputBlur}
       />
+      {error && (
+        <div className="search-error" role="alert">{error}</div>
+      )}
       
       {/* Loading Animation */}
       {isLoading && (
@@ -212,7 +223,7 @@ function App() {
                     key={id}
                     error={error}
                     temp={item.main.temp}
-                    time={formatDistanceToNow(new Date(item.dt_txt), {addSuffix: true})}
+                    time={format(new Date(item.dt_txt), 'EEE hh:mm a')}
                     chooseIcon={chooseIcon(item.weather[0].id)}
                   />
                 );

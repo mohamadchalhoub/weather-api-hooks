@@ -386,6 +386,17 @@
   font-weight: bold;
 }
 
+/* Inline search error */
+.search-error {
+  margin: 0 20px 10px 20px;
+  color: #ffeded;
+  background: rgba(255, 0, 0, 0.15);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
 /* Enhanced Weather Container */
 .weather-container {
   opacity: 1;
