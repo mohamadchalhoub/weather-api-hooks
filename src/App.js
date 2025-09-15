@@ -19,21 +19,91 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 function App() {
   const [data, setData] = useState(null);
   const [city, setCity] = useState("");
-  const [isPending, setIsPending] = useState(true);
+  const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showWeather, setShowWeather] = useState(false);
   const API_KEY = "93cbb145b6fa7753a7d6642754a2431b";
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=8&exclude=hourly&units=metric&appid=${API_KEY}`;
 
+  // Popular cities list for autocomplete
+  const cities = [
+    "New York", "London", "Tokyo", "Paris", "Sydney", "Berlin", "Rome", "Madrid", "Moscow", "Beijing",
+    "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose", "Austin",
+    "Barcelona", "Amsterdam", "Vienna", "Prague", "Warsaw", "Stockholm", "Copenhagen", "Helsinki", "Oslo", "Dublin",
+    "Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa", "Edmonton", "Winnipeg", "Quebec City", "Hamilton", "London",
+    "Melbourne", "Brisbane", "Perth", "Adelaide", "Gold Coast", "Newcastle", "Canberra", "Wollongong", "Geelong", "Hobart",
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Pune", "Jaipur", "Lucknow",
+    "São Paulo", "Rio de Janeiro", "Brasília", "Salvador", "Fortaleza", "Belo Horizonte", "Manaus", "Curitiba", "Recife", "Porto Alegre",
+    "Mexico City", "Guadalajara", "Monterrey", "Puebla", "Tijuana", "León", "Juárez", "Zapopan", "Nezahualcóyotl", "Guadalupe",
+    "Cairo", "Lagos", "Kinshasa", "Johannesburg", "Cape Town", "Nairobi", "Addis Ababa", "Casablanca", "Alexandria", "Abidjan",
+    "Bangkok", "Jakarta", "Manila", "Ho Chi Minh City", "Kuala Lumpur", "Singapore", "Seoul", "Hong Kong", "Taipei", "Macau",
+    "Buenos Aires", "Santiago", "Lima", "Bogotá", "Caracas", "Quito", "La Paz", "Asunción", "Montevideo", "Georgetown",
+    "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep", "Mersin", "Diyarbakır",
+    "Tehran", "Mashhad", "Isfahan", "Tabriz", "Shiraz", "Karaj", "Ahvaz", "Qom", "Kermanshah", "Urmia",
+    "Riyadh", "Jeddah", "Mecca", "Medina", "Dammam", "Khobar", "Taif", "Buraidah", "Tabuk", "Khamis Mushait",
+    "Dubai", "Abu Dhabi", "Sharjah", "Al Ain", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain", "Al Dhafra", "Al Fujairah",
+    "Beirut", "Tripoli", "Sidon", "Tyre", "Zahle", "Baalbek", "Jounieh", "Nabatieh", "Byblos", "Batroun",
+    "Amman", "Zarqa", "Irbid", "Russeifa", "Wadi as-Sir", "Aqaba", "Salt", "Madaba", "Jerash", "Mafraq",
+    "Damascus", "Aleppo", "Homs", "Hama", "Latakia", "Deir ez-Zor", "Raqqa", "Daraa", "Idlib", "Tartus",
+    "Baghdad", "Basra", "Mosul", "Erbil", "Najaf", "Karbala", "Sulaymaniyah", "Nasiriyah", "Ramadi", "Fallujah",
+    "Jerusalem", "Tel Aviv", "Haifa", "Rishon LeZion", "Petah Tikva", "Ashdod", "Netanya", "Beer Sheva", "Holon", "Bnei Brak",
+    "Doha", "Al Rayyan", "Al Wakrah", "Al Khor", "Dukhan", "Lusail", "Al Shamal", "Al Daayen", "Umm Salal", "Al Sheehaniya",
+    "Kuwait City", "Al Ahmadi", "Hawalli", "Al Farwaniyah", "Al Jahra", "Mubarak Al-Kabeer", "Al Asimah", "Al Farwaniyah", "Al Jahra", "Hawalli",
+    "Manama", "Riffa", "Muharraq", "Hamad Town", "A'ali", "Isa Town", "Sitra", "Budaiya", "Jidhafs", "Tubli",
+    "Muscat", "Seeb", "Salalah", "Bawshar", "Sohar", "Suwayq", "Ibri", "Saham", "Barka", "Rustaq",
+    "Sana'a", "Aden", "Taiz", "Hodeidah", "Ibb", "Dhamar", "Al-Mukalla", "Zinjibar", "Sayyan", "Ash Shihr",
+    "Beirut", "Tripoli", "Sidon", "Tyre", "Zahle", "Baalbek", "Jounieh", "Nabatieh", "Byblos", "Batroun"
+  ];
+
   const handleChange = (e) => {
-    setCity(e.target.value);
+    const value = e.target.value;
+    setCity(value);
+    
+    if (value.length > 0) {
+      const filteredCities = cities.filter(cityName =>
+        cityName.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredCities.slice(0, 10)); // Limit to 10 suggestions
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setCity(suggestion);
+    setShowSuggestions(false);
+    setSuggestions([]);
+  };
+
+  const handleInputFocus = () => {
+    if (city.length > 0 && suggestions.length > 0) {
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Delay hiding suggestions to allow for clicks
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Start loading animation
+    setIsLoading(true);
+    setShowWeather(false);
+    
     fetch(url)
       .then((res) => {
         if (!res.ok) {
-          throw error("Cannot fetch data from that resource");
+          throw new Error("Cannot fetch data from that resource");
         }
         return res.json();
       })
@@ -41,10 +111,18 @@ function App() {
         setIsPending(false);
         setData(data);
         setError(null);
+        
+        // Add delay for smooth transition
+        setTimeout(() => {
+          setIsLoading(false);
+          setShowWeather(true);
+        }, 500);
       })
       .catch((error) => {
         setIsPending(false);
         setError(error.message);
+        setIsLoading(false);
+        setShowWeather(false);
       });
     return { data, isPending, error };
   };
@@ -93,34 +171,63 @@ function App() {
   
 
   return (
-    <div className="clear rain">
-      <SearchBar handleChange={handleChange} handleSubmit={handleSubmit} chooseIcon={chooseIcon} />
-      {data && (
-        <TemperatureNow
-          description={data.list[0].weather[0].description}
-          temp_min={data.list[0].main.temp_min}
-          temp_max={data.list[0].main.temp_max}
-          humidity={data.list[0].main.humidity}
-          pressure={data.list[0].main.pressure}
-          feels_like={data.list[0].main.feels_like}
-          chooseIcon={chooseIcon(data.list[0].weather[0].id)}
-        />
+    <div className="app">
+      <SearchBar 
+        handleChange={handleChange} 
+        handleSubmit={handleSubmit} 
+        chooseIcon={chooseIcon}
+        city={city}
+        suggestions={suggestions}
+        showSuggestions={showSuggestions}
+        handleSuggestionClick={handleSuggestionClick}
+        handleInputFocus={handleInputFocus}
+        handleInputBlur={handleInputBlur}
+      />
+      
+      {/* Loading Animation */}
+      {isLoading && (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading weather data...</p>
+        </div>
       )}
-      <div className="TemperatureHourlyFlex">
-        {data &&
-          data.list.map((item, id) => {
-            if (id > 0) {
-              return (
-                <TemperatureHourly
-                  error={error}
-                  temp={item.main.temp}
-                  time={formatDistanceToNow(new Date(item.dt_txt), {addSuffix: true})}
-                  chooseIcon={chooseIcon(item.weather[0].id)}
-                />
-              );
-            }
-          })}
-      </div>
+      
+      {/* Weather Data with Animation */}
+      {data && showWeather && !isLoading && (
+        <div className="weather-container fade-in">
+          <TemperatureNow
+            description={data.list[0].weather[0].description}
+            temp_min={data.list[0].main.temp_min}
+            temp_max={data.list[0].main.temp_max}
+            humidity={data.list[0].main.humidity}
+            pressure={data.list[0].main.pressure}
+            feels_like={data.list[0].main.feels_like}
+            chooseIcon={chooseIcon(data.list[0].weather[0].id)}
+          />
+          <div className="TemperatureHourlyFlex">
+            {data.list.map((item, id) => {
+              if (id > 0) {
+                return (
+                  <TemperatureHourly
+                    key={id}
+                    error={error}
+                    temp={item.main.temp}
+                    time={formatDistanceToNow(new Date(item.dt_txt), {addSuffix: true})}
+                    chooseIcon={chooseIcon(item.weather[0].id)}
+                  />
+                );
+              }
+            })}
+          </div>
+        </div>
+      )}
+      
+      {/* Error Display */}
+      {error && !isLoading && (
+        <div className="error-container fade-in">
+          <p className="error-text">Error: {error}</p>
+        </div>
+      )}
     </div>
   );
 }

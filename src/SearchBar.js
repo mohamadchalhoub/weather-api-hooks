@@ -2,16 +2,33 @@ const SearchBar = (props) => {
   return (
     <div className="SearchBar">
       <form>
-        <input
-          required
-          type="text"
-          name="city"
-          autoComplete="on"
-          spellCheck="true"
-          value={props.city}
-          placeholder="Type in city name"
-          onChange={props.handleChange}
-        ></input>
+        <div className="search-input-container">
+          <input
+            required
+            type="text"
+            name="city"
+            autoComplete="off"
+            spellCheck="true"
+            value={props.city}
+            placeholder="Type in city name"
+            onChange={props.handleChange}
+            onFocus={props.handleInputFocus}
+            onBlur={props.handleInputBlur}
+          ></input>
+          {props.showSuggestions && props.suggestions.length > 0 && (
+            <div className="suggestions-dropdown">
+              {props.suggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="suggestion-item"
+                  onClick={() => props.handleSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <button onClick={props.handleSubmit}>find weather</button>
       </form>
     </div>
