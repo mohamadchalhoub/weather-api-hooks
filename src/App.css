@@ -395,6 +395,14 @@
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 13px;
+  animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
 /* Enhanced Weather Container */
@@ -630,4 +638,90 @@
 .error-container {
   position: relative;
   z-index: 10;
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 768px) {
+  .SearchBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .SearchBar input {
+    width: calc(100% - 40px);
+    margin: 12px 20px 8px 20px;
+    padding: 12px;
+  }
+
+  .SearchBar button {
+    width: calc(100% - 40px);
+    margin: 0 20px 12px 20px;
+    padding: 12px;
+  }
+
+  .suggestions-dropdown {
+    left: 20px;
+    right: 20px;
+    max-height: 180px;
+  }
+
+  .WeatherNow img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .WeatherNow h2 {
+    font-size: 18px;
+  }
+  .WeatherNow h3 {
+    font-size: 16px;
+  }
+  .WeatherNow h4, .WeatherNow h5 {
+    font-size: 14px;
+  }
+
+  .TemperatureHourlyFlex {
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 10px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .TemperatureHourlyFlex > * {
+    min-width: 96px;
+  }
+
+  /* Override inline sizes on hourly icons */
+  .TemperatureHourlyFlex img {
+    width: 64px !important;
+    height: 64px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .SearchBar input {
+    margin: 10px 12px 8px 12px;
+    width: calc(100% - 24px);
+  }
+  .SearchBar button {
+    margin: 0 12px 10px 12px;
+    width: calc(100% - 24px);
+  }
+  .suggestions-dropdown {
+    left: 12px;
+    right: 12px;
+  }
+
+  .WeatherNow img {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .WeatherNow h2 { font-size: 16px; }
+  .WeatherNow h3 { font-size: 14px; }
+  .WeatherNow h4, .WeatherNow h5 { font-size: 13px; }
+
+  .TemperatureHourlyFlex > * {
+    min-width: 88px;
+  }
 }

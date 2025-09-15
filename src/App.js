@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import TemperatureHourly from "./TemperatureHourly";
 import TemperatureNow from "./TemperatureNow";
@@ -26,6 +26,13 @@ function App() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showWeather, setShowWeather] = useState(false);
+  
+  // Auto-dismiss error after 3 seconds
+  useEffect(() => {
+    if (!error) return;
+    const timeoutId = setTimeout(() => setError(null), 3000);
+    return () => clearTimeout(timeoutId);
+  }, [error]);
   const API_KEY = "93cbb145b6fa7753a7d6642754a2431b";
   const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=8&exclude=hourly&units=metric&appid=${API_KEY}`;
 
