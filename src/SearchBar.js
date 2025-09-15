@@ -21,7 +21,10 @@ const SearchBar = (props) => {
                 <div
                   key={index}
                   className="suggestion-item"
-                  onClick={() => props.handleSuggestionClick(suggestion)}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    props.handleSuggestionClick(suggestion);
+                  }}
                 >
                   {suggestion}
                 </div>

@@ -642,14 +642,7 @@
 
 /* ===================== Responsive ===================== */
 @media (max-width: 768px) {
-  html, body {
-    overflow-x: hidden;
-  }
-
-  .app, .weather-container {
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
+  html, body { overflow-x: hidden; }
 
   .SearchBar {
     flex-direction: column;
