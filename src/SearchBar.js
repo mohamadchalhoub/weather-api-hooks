@@ -13,7 +13,6 @@ const SearchBar = (props) => {
             placeholder="Type in city name"
             onChange={props.handleChange}
             onFocus={props.handleInputFocus}
-            onBlur={props.handleInputBlur}
           ></input>
           {props.showSuggestions && props.suggestions.length > 0 && (
             <div className="suggestions-dropdown">
@@ -21,10 +20,8 @@ const SearchBar = (props) => {
                 <div
                   key={index}
                   className="suggestion-item"
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    props.handleSuggestionClick(suggestion);
-                  }}
+                  onMouseDown={(e) => { e.preventDefault(); props.handleSuggestionClick(suggestion); }}
+                  onTouchStart={(e) => { e.preventDefault(); props.handleSuggestionClick(suggestion); }}
                 >
                   {suggestion}
                 </div>

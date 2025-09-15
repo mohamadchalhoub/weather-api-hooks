@@ -340,6 +340,7 @@
   z-index: 1000;
   max-height: 200px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   animation: slideDown 0.3s ease-out;
 }
 
