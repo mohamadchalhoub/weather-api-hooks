@@ -1,7 +1,7 @@
 const SearchBar = (props) => {
   return (
     <div className="SearchBar">
-      <form>
+      <form onSubmit={props.handleSubmit}>
         <div className="search-input-container">
           <input
             required
@@ -29,7 +29,7 @@ const SearchBar = (props) => {
             </div>
           )}
         </div>
-        <button onClick={props.handleSubmit}>find weather</button>
+        <button type="submit">find weather</button>
       </form>
     </div>
   );
